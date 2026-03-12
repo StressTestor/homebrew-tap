@@ -1,8 +1,8 @@
 cask "agora" do
   arch arm: "aarch64"
 
-  version "0.3.0"
-  sha256 arm: "c984be8558db7bf944c3dca397be3923f44c1441cd57846b8d22ec947bfc8007"
+  version "0.3.1"
+  sha256 arm: "56bcf9a65f1a59677e439a1b41fb8539bb5441d1878790a10ade03de20e5cd1e"
 
   url "https://github.com/StressTestor/Agora-ai-agent-visualizer/releases/download/v#{version}/agora_#{version}_#{arch}.dmg"
   name "Agora"
