@@ -10,6 +10,13 @@ cask "agora" do
   homepage "https://github.com/StressTestor/Agora-ai-agent-visualizer"
 
   preflight do
+    # remove existing app (handles manual installs that brew doesn't track)
+    app_path = "/Applications/agora.app"
+    if Dir.exist?(app_path)
+      system_command "/usr/bin/osascript", args: ["-e", 'quit app "agora"'], print_stderr: false
+      FileUtils.rm_rf(app_path)
+    end
+
     # clear Tauri WebKit cache so upgrades pick up new frontend assets
     %w[
       ~/Library/WebKit/dev.notbatman.agora
