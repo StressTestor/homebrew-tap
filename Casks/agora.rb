@@ -9,6 +9,19 @@ cask "agora" do
   desc "Multi-model AI agent debate visualizer for Claude Code teams"
   homepage "https://github.com/StressTestor/Agora-ai-agent-visualizer"
 
+  preflight do
+    # clear Tauri WebKit cache so upgrades pick up new frontend assets
+    %w[
+      ~/Library/WebKit/dev.notbatman.agora
+      ~/Library/Caches/dev.notbatman.agora
+      ~/Library/Application\ Support/dev.notbatman.agora
+      ~/Library/Saved\ Application\ State/dev.notbatman.agora.savedState
+    ].each do |dir|
+      path = File.expand_path(dir)
+      FileUtils.rm_rf(path) if Dir.exist?(path)
+    end
+  end
+
   app "agora.app"
 
   zap trash: [
