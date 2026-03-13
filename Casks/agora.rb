@@ -31,6 +31,11 @@ cask "agora" do
 
   app "agora.app"
 
+  postflight do
+    # strip Gatekeeper quarantine — app is unsigned
+    system_command "/usr/bin/xattr", args: ["-cr", "#{appdir}/agora.app"]
+  end
+
   zap trash: [
     "~/.config/agora",
     "~/Library/WebKit/dev.notbatman.agora",
