@@ -5,22 +5,24 @@ class PrismTriage < Formula
   sha256 "b0711ba638dc4004673f20b748c46914d67f50c181def6aa59eea2ff072438f4"
   license "MIT"
 
-  depends_on "node@20"
+  depends_on "node"
 
   def install
-    system "npm", "install", *std_npm_args, "--production=false"
+    # Install all deps (including devDeps for tsc)
+    system "npm", "ci"
+    # Build TypeScript
     system "npm", "run", "build"
+    # Prune devDeps
+    system "npm", "prune", "--production"
 
-    # Install production deps into libexec
-    libexec.install Dir["*"]
-    cd libexec do
-      system "npm", "prune", "--production"
-    end
+    # Install everything into libexec
+    libexec.install Dir["dist", "node_modules", "package.json", "prism.config.yaml", ".env.example"]
 
-    # Create wrapper script that calls node with the compiled CLI
+    # Create wrapper script
+    node = Formula["node"].opt_bin/"node"
     (bin/"prism").write <<~SH
       #!/bin/bash
-      exec "#{Formula["node@20"].opt_bin}/node" "#{libexec}/dist/cli.js" "$@"
+      exec "#{node}" "#{libexec}/dist/cli.js" "$@"
     SH
   end
 
